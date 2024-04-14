@@ -9,6 +9,8 @@ export const Nav = () => {
     const isUserLoggedIn = true
     const [providers, setProviders] = useState(null)
 
+    const [toggleDropdown, setToggleDropdown] = useState(false)
+
     useEffect(() => {
       const setProviders = async () => {
         const response = await getProviders()
@@ -84,8 +86,39 @@ export const Nav = () => {
                             width={37}
                             height={37}
                             className='object-contain'
-                            onClick={() => {}}
+                            onClick={() => setToggleDropdown((prev) => !prev)}
                         />
+
+                        {
+                            toggleDropdown && (
+                                <div className='dropdown'>
+                                    <Link
+                                        href="/profile"
+                                        className='dropdown_link'
+                                        onClick={() => setToggleDropdown(false)}
+                                    >
+                                        My Profile
+                                    </Link>
+                                    <Link
+                                        href="/create-prompt"
+                                        className='dropdown_link'
+                                        onClick={() => setToggleDropdown(false)}
+                                    >
+                                        Create Propmpt
+                                    </Link>
+                                    <button 
+                                        type="button"
+                                        onClick={() => {
+                                            setToggleDropdown(false)
+                                            signOut()
+                                        }}
+                                        className='mt-5 black_btn'
+                                    >
+                                        Sign Out
+                                    </button>
+                                </div>
+                            )
+                        }
                     </div>
                 ) : (
                     <>
