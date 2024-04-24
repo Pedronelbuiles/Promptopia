@@ -8,11 +8,18 @@ const handler = NextAuth({
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            // authorization: {
+            //     params: {
+            //         prompt: "consent",
+            //         access_type: "offline",
+            //         response_type: "code"
+            //     }
+            // }
         })
     ],
     callbacks: {
-        async session({ session }) {
+        async session({ session, token, user }) {
             const sessionUser = await User.findOne({
                 email: session.user.email
             })
@@ -23,6 +30,7 @@ const handler = NextAuth({
         },
         async signIn({ profile }) {
             try {
+                console.log(profile)
                 await connectToDB()
                 const userExist = await User.findOne({
                     email: profile.email
